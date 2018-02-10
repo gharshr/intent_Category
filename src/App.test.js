@@ -20,7 +20,8 @@ class App extends Component {
     super(props);
     this.state = {
       text : 'fdajk ljdal',
-      intent : 'None'
+      intent : 'None',
+	  intentResponse : ''
     }
   }
   handleTextChange(e){
@@ -57,11 +58,11 @@ class App extends Component {
 		getNews: this.state.text
 	  }),
     })
-    .then((response) => response.json())		
+    .then((response) => response.text())		
 	.then(response => {
         this.setState({
           intentResponse: JSON.stringify(response),
-          intent: response.data.intentResponse[0].value
+          intent: response.data.intent[0].value
         })
 	})
 	.catch(error => console.error('Error:',error));
