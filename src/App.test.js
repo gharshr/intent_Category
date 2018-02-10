@@ -20,7 +20,7 @@ class App extends Component {
     super(props);
     this.state = {
       text : 'fdajk ljdal',
-      intent : 'None found'
+      intent : 'None'
     }
   }
   handleTextChange(e){
@@ -48,6 +48,7 @@ class App extends Component {
 	fetch('https://api.abash76.hasura-app.io/get-news', 
 	{
       method: 'POST',
+	  mode: 'no-cors',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -56,17 +57,15 @@ class App extends Component {
 		getNews: this.state.text
 	  }),
     })
-    .then(function(response)
-	{
-		if(response.ok) {
-			return response.blob();
-		}
-		throw new Error('Network response was not ok.');
-		//return response.json();
-	})		
-	.then(response => console.log('Success:',response))
+    .then((response) => response.json())		
+	.then(response => {
+        this.setState({
+          intentResponse: JSON.stringify(response),
+          intent: response.data.intentResponse[0].value
+        })
+	})
 	.catch(error => console.error('Error:',error));
-	alert(this.state.text);
+	alert(this.state.intent);
   }
   
   render() {
